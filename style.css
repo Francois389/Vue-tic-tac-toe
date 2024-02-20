@@ -23,4 +23,31 @@
 .board {
     border: 1px solid #000;
     width: fit-content;
+    margin: 0 10%;
+}
+
+.game {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.gagnant {
+    color: #16a216;
+    animation-name: fade;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes fade {
+    0% {
+        font-size: 2.5rem;
+    }
+    50% {
+        font-size: 4rem;
+    }
+    100% {
+        font-size: 2.5rem;
+    }
 }
