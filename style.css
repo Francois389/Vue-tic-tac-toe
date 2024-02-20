@@ -1,0 +1,26 @@
+* {
+    font-family: Arial, sans-serif;
+}
+
+.ligne {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: fit-content;
+}
+
+.cellule {
+    border: 1px solid #000;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+}
+
+.board {
+    border: 1px solid #000;
+    width: fit-content;
+}

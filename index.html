@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Tic Tac Toe</title>
+
+        <!-- Import Vue.js -->
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+        <!-- Import CSS -->
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+    <div id="app">
+        <h1>{{ title }}</h1>
+        <div class="board">
+            <div class="ligne" v-for="(ligne, indexLigne) in grille" :key="'ligne' + indexLigne">
+                <div v-for="(cellule, indexCellule) in ligne" :key="'cellule' + indexCellule">
+                    <div class="cellule" @click="gestionDuClick(indexLigne, indexCellule)">{{ cellule }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Import App -->
+    <script src="main.js"></script>
+
+    <script>
+        const mountedApp = app.mount('#app')
+    </script>
+
+    </body>
+</html>
