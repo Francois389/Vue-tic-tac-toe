@@ -19,21 +19,30 @@
         <h2>{{ information }}</h2>
         <div class="game">
             <div class="board">
-                <div class="ligne" v-for="(ligne, indexLigne) in grille" :key="'ligne' + indexLigne">
-                    <div v-for="(cellule, indexCellule) in ligne" :key="'cellule' + indexCellule">
-                        <div
-                                class="cellule"
-                                @click="gestionDuClick(indexLigne, indexCellule)"
-                                :class="{gagnant: alignementGagnant.includes(indexLigne * 3 + indexCellule)}"
-                        >
+                <div class="ligne" v-for="(ligne, indexLigne) in historique[nbTour]" :key="'ligne' + indexLigne">
+                    <div
+                            v-for="(cellule, indexCellule) in ligne"
+                            :key="'cellule' + indexCellule"
+                            class="cellule"
+                            @click="gestionDuClick(indexLigne, indexCellule)">
+
+                        <div :class="{gagnant: alignementGagnant.includes(indexLigne * 3 + indexCellule),
+                                      matchNul: nbTour === 9 && !existeGagnant}">
                             {{ cellule }}
                         </div>
                     </div>
                 </div>
             </div>
-            <div>
-                <button :disabled="0 === nbTour" @click="reinitialiser">Recommencer</button>
-            </div>
+            <ul class="voyage-temporel">
+                <p v-show="0 !== nbTour">
+                    Retirer le coups :
+                </p>
+                <li v-show="indice !== nbTour" v-for="(elt, indice) in  historique" :key="indice">
+                    <button @click="gestionVoyageTemporel(indice)">
+                        Coups n&deg; {{ indice + 1 }} &rarr; {{pions[indice % 2]}}
+                    </button>
+                </li>
+            </ul>
         </div>
     </div>
 

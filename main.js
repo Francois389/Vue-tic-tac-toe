@@ -2,7 +2,7 @@ const app = Vue.createApp({
     data() {
         return {
             title: 'Tic Tac Toe',
-            grille: [['', '', ''], ['', '', ''], ['', '', '']],
+            historique: [[['', '', ''], ['', '', ''], ['', '', '']]],
             pions: ['X', 'O'],
             nbTour: 0,
             existeGagnant: false,
@@ -12,15 +12,20 @@ const app = Vue.createApp({
     },
     methods: {
         gestionDuClick(ligne, colonne) {
-            if (this.grille[ligne][colonne] !== '') {
+            if (this.historique[this.nbTour][ligne][colonne] !== '') {
                 return
             }
             if (!this.existeGagnant) {
-                this.grille[ligne][colonne] = this.pions[this.nbTour % 2]
+                let nouvelleGrille;
+
+                //Copie de la grille actuelle
+                nouvelleGrille = JSON.parse(JSON.stringify(this.historique[this.nbTour]))
+
+                this.historique.push(nouvelleGrille)
+                this.historique[this.nbTour + 1][ligne][colonne] = this.pions[this.nbTour % 2]
                 this.nbTour++
 
-                const gagnant = this.estGagne(this.grille)
-                console.log(this.alignementGagnant)
+                const gagnant = this.estGagne()
                 if (gagnant !== '') {
                     this.affichageGagnant(gagnant)
                 } else if (this.nbTour === 9 && !this.existeGagnant) {
@@ -30,13 +35,6 @@ const app = Vue.createApp({
                 }
             }
         },
-        reinitialiser() {
-            this.grille = [['', '', ''], ['', '', ''], ['', '', '']];
-            this.nbTour = 0;
-            this.existeGagnant = false;
-            this.information = 'Cliquez sur une case pour commencer';
-            this.alignementGagnant = [];
-        },
         affichageGagnant(gagnant) {
             this.existeGagnant = true
             this.information = `Le joueur ${gagnant} a gagné`
@@ -44,27 +42,48 @@ const app = Vue.createApp({
         estGagne() {
             for (let i = 0; i < 3; i++) {
                 //On regarde les lignes
-                if (this.grille[i][0] !== '' && this.grille[i][0] === this.grille[i][1] && this.grille[i][0] === this.grille[i][2]) {
+                if (   this.historique[this.nbTour][i][0] !== ''
+                    && this.historique[this.nbTour][i][0] === this.historique[this.nbTour][i][1]
+                    && this.historique[this.nbTour][i][0] === this.historique[this.nbTour][i][2]) {
+
                     this.alignementGagnant = [i * 3, i * 3 + 1, i * 3 + 2];
-                    return this.grille[i][0]
+                    return this.historique[this.nbTour][i][0]
                 }
                 //On regarde les colonnes
-                if (this.grille[0][i] !== '' && this.grille[0][i] === this.grille[1][i] && this.grille[0][i] === this.grille[2][i]) {
+                if (   this.historique[this.nbTour][0][i] !== ''
+                    && this.historique[this.nbTour][0][i] === this.historique[this.nbTour][1][i]
+                    && this.historique[this.nbTour][0][i] === this.historique[this.nbTour][2][i]) {
+
                     this.alignementGagnant = [i, 3 + i, 2 * 3 + i];
-                    return this.grille[0][i]
+                    return this.historique[this.nbTour][0][i]
                 }
             }
             //On regarde la diagonale NO-SE
-            if (this.grille[0][0] !== '' && this.grille[0][0] === this.grille[1][1] && this.grille[0][0] === this.grille[2][2]) {
+            if (   this.historique[this.nbTour][0][0] !== ''
+                && this.historique[this.nbTour][0][0] === this.historique[this.nbTour][1][1]
+                && this.historique[this.nbTour][0][0] === this.historique[this.nbTour][2][2]) {
+
                 this.alignementGagnant = [0, 4, 8];
-                return this.grille[0][0]
+                return this.historique[this.nbTour][0][0]
             }
             //On regarde la diagonale NE-SO
-            if (this.grille[0][2] !== '' && this.grille[0][2] === this.grille[1][1] && this.grille[0][2] === this.grille[2][0]) {
+            if (   this.historique[this.nbTour][0][2] !== ''
+                && this.historique[this.nbTour][0][2] === this.historique[this.nbTour][1][1]
+                && this.historique[this.nbTour][0][2] === this.historique[this.nbTour][2][0]) {
+
                 this.alignementGagnant = [2, 4, 6];
-                return this.grille[0][2]
+                return this.historique[this.nbTour][0][2]
             }
             return ''
+        },
+        gestionVoyageTemporel(index) {
+            this.historique.splice(index + 1)
+            this.nbTour = index
+            this.existeGagnant = false
+            this.information = `C'est au tour du joueur ${this.pions[this.nbTour % 2]}`
+            this.alignementGagnant = []
+
+            console.log(index)
         }
     },
 });
